@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin - Tickets</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <a href="/admin/dashboard" class="back-btn">⬅️ Back to Dashboard</a>
+</head>
+<body>
+    <div class="container">
+        <h2>🎫 Booked Tickets</h2>
+        <table>
+            <tr>
+                <th>Ticket ID</th>
+                <th>Passenger</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Fare</th>
+            </tr>
+            {% for ticket in tickets %}
+            <tr>
+                <td>{{ ticket.id }}</td>
+                <td>{{ ticket.passenger_name }}</td>
+                <td>{{ ticket.from_station }}</td>
+                <td>{{ ticket.to_station }}</td>
+                <td>₹{{ ticket.fare }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>

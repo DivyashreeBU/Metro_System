@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Metro Management System</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="flash">
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <div class="hero">
+        <h1>Welcome to Bangalore Metro Portal</h1>
+        <p>Seamless travel. Smart ticketing. Real-time updates.</p>
+    </div>
+
+    <div class="nav-buttons">
+        <a href="/book" class="btn" >🎫 Book Ticket</a>
+        <a href="/login" class="btn" >💳 Smart Card Login</a>
+        <a href="/register" class="btn">📝 New User Register</a>
+        <a href="/station-info" class="btn">📍 View Station Info</a>
+        <a href="/routes" class="btn">🚇 Explore Metro Routes</a>
+        <a href="/admin/login" class="btn">🛡️ Admin Login</a>
+        <a href="/feedback" class="btn">📝 Submit Feedback</a>
+    </div>
+
+    <div class="footer">
+        <p>Made with ❤️ in Bengaluru</p>
+        <button onclick="toggleDarkMode()" class="dark-btn">🌙 Toggle Dark Mode</button>
+    </div>
+
+    <script>
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Metro Stations</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+            background-color: #f4f6f8;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #e0e0e0;
+        }
+        .tag {
+            background-color: #ffe0b2;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+        .form-inline {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .form-inline input,
+        .form-inline select {
+            padding: 5px;
+            font-size: 0.9em;
+        }
+        .form-inline button {
+            padding: 5px 10px;
+        }
+        .form-box {
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="max-width:800px;">
+    <a href="/admin/dashboard" class="back-btn">⬅️ Back to Dashboard</a>
+    <h2>🏗️ Manage Metro Stations</h2>
+
+    <div style="display: flex; gap: 40px; align-items: flex-start; flex-wrap: wrap;">
+        <!-- 📋 Station Table -->
+        <div style="flex: 2;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Station Name</th>
+                        <th>Line</th>
+                        <th>Interchange</th>
+                        <th>Edit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for line in lines %}
+                        {% for station in line.stations %}
+                            <tr>
+                                <td>{{ station.name }}</td>
+                                <td>{{ line.name }}</td>
+                                <td>
+                                    {% if station.is_interchange %}
+                                        <span class="tag">Yes 🔁</span>
+                                    {% else %}
+                                        No
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <form method="post" action="/admin/stations/edit/{{ station.id }}" class="form-inline">
+                                        <input name="name" value="{{ station.name }}" required>
+                                        
+
+                                        <select name="line_id" required>
+                                            {% for l in lines %}
+                                                <option value="{{ l.id }}" {% if l.id == station.line_id %}selected{% endif %}>{{ l.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <select name="is_interchange">
+                                            <option value="false" {% if not station.is_interchange %}selected{% endif %}>No</option>
+                                            <option value="true" {% if station.is_interchange %}selected{% endif %}>Yes</option>
+                                        </select>
+                                        <button type="submit" class="btn">✏️</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ➕ Add Station Form -->
+        <div style="flex: 1; min-width: 300px;">
+            <form method="post" action="/admin/stations/add" class="form-box">
+                <h3>➕ Add New Station</h3>
+
+                <label>Station Name:</label><br>
+                <input name="station_name" placeholder="Enter station name" required><br><br>
+
+                <label>Metro Line:</label><br>
+                <select name="line_id" required>
+                    {% for line in lines %}
+                        <option value="{{ line.id }}">{{ line.name }}</option>
+                    {% endfor %}
+                </select><br><br>
+
+                <label>Is Interchange:</label><br>
+                <select name="is_interchange">
+                    <option value="false">No</option>
+                    <option value="true">Yes</option>
+                </select><br><br>
+
+                <button type="submit" class="btn">✅ Add Station</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

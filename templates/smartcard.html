@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Card Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <a href="/" class="back-btn">⬅️ Back to Home</a>
+</head>
+<body>
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="flash-box">
+              {% for message in messages %}
+                <div class="flash-message">💡 {{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <h2>💳 Welcome, {{ user.full_name }}</h2>
+        <div class="user-info">
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Phone:</strong> {{ user.phone }}</p>
+            <p><strong>Smart Card Balance:</strong> ₹{{ card.balance }}</p>
+        </div>
+
+        <form method="post" class="form-box">
+            <label>Recharge Amount:</label>
+            <input name="amount" placeholder="Enter amount to recharge" required>
+            <button type="submit" class="btn" style="width: 20%;">Recharge</button>
+        </form>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="/logout" class="btn">🚪 Logout</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ticket Confirmation</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>✅ Ticket Booked Successfully!</h2>
+        <p><strong>Name:</strong> {{ ticket.passenger_name }}</p>
+        <p><strong>Phone:</strong> {{ ticket.phone }}</p>
+        <p><strong>Train ID:</strong> {{ ticket.train_id }}</p>
+        <p><strong>From:</strong> {{ ticket.from_station }}</p>
+        <p><strong>To:</strong> {{ ticket.to_station }}</p>
+        <p><strong>Fare:</strong> ₹{{ "%.2f"|format(ticket.fare) }}</p>
+        <p><strong>Booked At:</strong> {{ ticket.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+        <a href="/book" class="btn">🎫 Book Another</a>
+    </div>
+</body>
+</html>

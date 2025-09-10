@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Generate Ticket</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        h2 {
+            font-size: 28px;
+            color: #34495e;
+            margin-bottom: 25px;
+        }
+
+        .form-box {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-box input,
+        .form-box select {
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .form-box label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+
+        .btn {
+            background-color: #27ae60;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #219150;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/admin/dashboard" class="back-btn" style="color: #ffffff;">⬅️ Back to Dashboard</a>
+        <h2>🎫 Generate Ticket</h2>
+
+        <form method="post" action="/admin/generate-ticket" class="form-box">
+            <div>
+                <label for="passenger_name">Passenger Name:</label>
+                <input name="passenger_name" id="passenger_name" placeholder="Enter passenger name" required>
+            </div>
+
+            <div>
+                <label for="phone">Phone Number:</label>
+                <input name="phone" id="phone" placeholder="Enter phone number" required>
+            </div>
+
+            <div>
+                <label for="from_station">From Station:</label>
+                <select name="from_station" id="from_station" required>
+                    {% for station in stations %}
+                        <option value="{{ station }}">{{ station }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label for="to_station">To Station:</label>
+                <select name="to_station" id="to_station" required>
+                    {% for station in stations %}
+                        <option value="{{ station }}">{{ station }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="btn">✅ Generate Ticket</button>
+        </form>
+    </div>
+</body>
+</html>

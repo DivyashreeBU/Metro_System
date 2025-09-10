@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Route Analytics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="max-width: 1000px;">
+        <a href="/admin/dashboard" class="back-btn">⬅️ Back to Dashboard</a>
+
+        <h2>📈 Popular Routes</h2>
+        <canvas id="routeChart" width="400" height="100"></canvas>
+
+        <hr>
+
+        <!-- Date Filter Form -->
+        <form method="get" action="/admin/analytics" class="form-box">
+            <label>From:</label>
+            <input type="date" name="start_date" required>
+            <label>To:</label>
+            <input type="date" name="end_date" required>
+            <button type="submit" class="btn">🔍 Filter</button>
+        </form>
+    </div>
+
+    <script>
+        // Popular Routes Chart (from API)
+        fetch('/api/admin/analytics')
+            .then(response => response.json())
+            .then(data => {
+                const labels = data.map(item => item.route);
+                const counts = data.map(item => item.count);
+
+                new Chart(document.getElementById('routeChart'), {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Tickets Booked',
+                            data: counts,
+                            backgroundColor: '#00796b'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Tickets'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Route'
+                                }
+                            }
+                        }
+                    }
+                });
+            });
+    </script>
+</body>
+</html>
