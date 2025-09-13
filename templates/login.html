@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Card Login</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <a href="/" class="back-btn">⬅️ Back to Home</a>
+</head>
+<body>
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="flash-box">
+              {% for message in messages %}
+                <div class="flash-message">⚠️ {{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <h2>🔐 Smart Card Login</h2>
+        <form method="post" class="form-box">
+            <label>Username:</label>
+            <input name="username" placeholder="Enter your username" required>
+
+            <label>Password:</label>
+            <input name="password" type="password" placeholder="Enter your password" required>
+
+            <button type="submit" class="btn" style="width: 20%;margin-left: 40%;">➡️ Login</button>
+        </form>
+
+        <p class="register-link">📝 New user? <a href="/register">Register here</a></p>
+    </div>
+</body>
+</html>

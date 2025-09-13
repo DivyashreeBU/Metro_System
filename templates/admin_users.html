@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Users</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .container{
+            max-width: 1500px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+            color: #f8fbfd;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            text-align: left;
+        }
+        input[type="text"] {
+            width: 90%;
+            padding: 6px;
+            box-sizing: border-box;
+        }
+        .btn-edit {
+            padding: 6px 12px;
+            background-color: #0078D4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn-edit:hover {
+            background-color: #005fa3;
+        }
+        .form-box {
+            margin-top: 30px;
+        }
+        .flash-messages {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+            color: green;
+            font-weight: bold;
+        }
+        .btn-view, .btn-delete {
+        padding: 10px 16px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .btn-view {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .btn-view:hover {
+        background-color: #218838;
+    }
+
+    .btn-delete {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .btn-delete:hover {
+        background-color: #c82333;
+    }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+    <a href="/admin/dashboard" class="back-btn" style="margin-right: 1000px;">⬅️ Back to Dashboard</a>
+    <a href="/admin/users/add" class="back-btn">➕ Add Users</a>
+    <h2>👥 Registered Users</h2>
+
+    <!-- 🔍 Search Form -->
+    <form method="get" action="/admin/users/search" style="margin-bottom: 20px;">
+        <tr>
+            <input type="text" name="query" placeholder="Search by username..." required>
+            <button type="submit" class="btn-edit" style="margin-top: 20px;">🔍 Search</button>
+        </tr>
+    </form>
+
+    <div class="action-buttons" style="display: flex; gap: 10px;">
+    <form method="get" action="/admin/users">
+        <button type="submit" class="btn-view">👥 View All Users</button>
+    </form>
+
+    <form method="post" action="/admin/users/delete_all">
+        <button type="submit" class="btn-delete">🗑️ Delete All Users</button>
+    </form>
+</div>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="flash-messages">
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Smartcard No.</th>
+                <th>Balance</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+<form method="post" action="/admin/users/edit/{{ user.id }}">
+    <td>{{ user.id }}</td>
+    <td><input type="text" name="username" value="{{ user.username }}" required></td>
+    <td><input type="text" name="phone" value="{{ user.phone }}" required></td>
+    <td><input type="text" name="email" value="{{ user.email }}" required></td>
+    <td><input type="text" name="smartcard_number" value="{{ user.smartcard_number }}" readonly></td>
+    <td><p id="balance-{{ user.id }}">{{ user.balance }}</p></td>
+    <td style="display: flex; gap: 6px;">
+        <select name="status" required>
+            <option value="Processing" {{ 'selected' if user.status == 'Processing' else '' }}>Processing</option>
+            <option value="Pending" {{ 'selected' if user.status == 'Pending' else '' }}>Pending</option>
+            <option value="Issued" {{ 'selected' if user.status == 'Issued' else '' }}>Issued</option>
+        </select>
+    <form method="post" action="/admin/users/edit/{{ user.id }}">
+        <button type="submit" class="btn-edit" style="background-color: rgb(48, 77, 192);">Edit</button>
+    </form>
+    <form method="post" action="/admin/users/delete/{{ user.id }}">
+        <button type="submit" class="btn-edit" style="background-color: red;">🗑️ Delete</button>
+    </form>
+    <button class="btn-edit" style="background-color: #28a745;" onclick="rechargeUser({{ user.id }})">💰 Recharge</button>
+</td>
+</tr>
+</form>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+<script>
+function enableEditing(button) {
+    const row = button.closest('tr');
+    const inputs = row.querySelectorAll('input:not([readonly]), select');
+}
+
+function rechargeUser(userId) {
+    const amount = prompt("Enter recharge amount:");
+    if (!amount || isNaN(amount) || amount <= 0) {
+        alert("Invalid amount.");
+        return;
+    }
+
+    fetch(`/admin/users/recharge/${userId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: parseFloat(amount) })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById(`balance-${userId}`).textContent = data.new_balance;
+            alert("✅ Recharge successful!");
+        } else {
+            alert("❌ Recharge failed.");
+        }
+    });
+}
+</script>
+</html>

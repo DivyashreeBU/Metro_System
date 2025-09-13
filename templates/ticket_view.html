@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Metro Ticket Details</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #eef2f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .ticket-box {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .ticket-box p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .highlight {
+            font-weight: bold;
+            color: #2980b9;
+        }
+
+        .qr-code {
+            margin-top: 20px;
+        }
+
+        .btn {
+            margin-top: 20px;
+            background-color: #0078D4;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #005fa3;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🎫 Metro Ticket Details</h2>
+
+        <div class="ticket-box">
+            <p><span class="highlight">Passenger Name:</span> {{ ticket.passenger_name }}</p>
+            <p><span class="highlight">Phone Number:</span> {{ ticket.phone }}</p>
+            <p><span class="highlight">Train ID:</span> {{ ticket.train_id }}</p>
+            <p><span class="highlight">From Station:</span> {{ ticket.from_station }}</p>
+            <p><span class="highlight">To Station:</span> {{ ticket.to_station }}</p>
+            <p><span class="highlight">Fare:</span> ₹{{ ticket.fare }}</p>
+            <p><span class="highlight">Booked At:</span> {{ ticket.created_at.strftime('%d-%b-%Y %I:%M %p') }}</p>
+            <div class="qr-code">
+                <h4>📦 QR Code</h4>
+                {% if ticket.qr_code_path %}
+                    <img src="/{{ ticket.qr_code_path }}" alt="QR Code" style="width:200px;">
+                {% endif %}
+            </div>
+        </div>
+
+        <button class="btn" onclick="window.print()">🖨️ Download Ticket</button>
+        <a href="/book" class="btn">🏠 Back</a>
+    </div>
+</body>
+</html>

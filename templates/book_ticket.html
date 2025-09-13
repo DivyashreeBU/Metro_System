@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Metro Ticket</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .form-box {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-box input,
+        .form-box select {
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            background-color: #27ae60;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-left: 170px;
+        }
+
+        .btn:hover {
+            background-color: #219150;
+        }
+
+        .flash-box {
+            margin-bottom: 20px;
+        }
+
+        .flash-message {
+            background-color: #ffe0e0;
+            color: #c0392b;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+            color: #eff4f7;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-btn">⬅️ Back to Home</a>
+        <a href="/search-ticket" class="btn" style="margin-left: 350px;" >🎫 Find Ticket</a>
+        <h2>🎫 Book Metro Ticket</h2>
+
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="flash-box">
+              {% for message in messages %}
+                <div class="flash-message">⚠️ {{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <form method="post" class="form-box" action="/book">
+            <label for="passenger_name">Passenger Name:</label>
+            <input name="passenger_name" id="passenger_name" required>
+
+            <label for="phone">Phone Number:</label>
+            <input name="phone" id="phone" required>
+
+            <label for="from_station">From Station:</label>
+            <select name="from_station" id="fromStation" required>
+                {% for station in stations %}
+                    <option value="{{ station }}">{{ station }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="to_station">To Station:</label>
+            <select name="to_station" id="toStation" required>
+                {% for station in stations %}
+                    <option value="{{ station }}">{{ station }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit" class="btn">✅ Book Ticket</button>
+        </form>
+    </div>
+
+    <script>
+        const fromSelect = document.getElementById('fromStation');
+        const toSelect = document.getElementById('toStation');
+
+        function updateToOptions() {
+            const selectedFrom = fromSelect.value;
+
+            Array.from(toSelect.options).forEach(option => {
+                option.disabled = option.value === selectedFrom;
+            });
+
+            if (toSelect.value === selectedFrom) {
+                toSelect.selectedIndex = 0;
+            }
+        }
+
+        fromSelect.addEventListener('change', updateToOptions);
+        updateToOptions();
+    </script>
+</body>
+</html>

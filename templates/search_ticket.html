@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Find Your Ticket</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        input,
+        select {
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            width: 60%;
+            box-sizing: border-box;
+            margin-left: 120px;
+        }
+
+        button[type="submit"] {
+            background-color: #0078D4;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 60%;
+            margin-left: 120px;
+            margin-bottom: 30px;
+            margin-top: 20px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #005fa3;
+        }
+
+        .btn {
+            background-color: #0078D4;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            width: 10%;
+            margin-left: 250px;
+            text-align: canter;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🔍 Find Your Ticket</h2>
+        <form method="post" action="/search-ticket">
+            <input name="passenger_name" placeholder="Passenger Name" required>
+
+            <select name="from_station" id="fromStation" required>
+                {% for station in stations %}
+                    <option value="{{ station }}">{{ station }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="to_station" id="toStation" required>
+                {% for station in stations %}
+                    <option value="{{ station }}">{{ station }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">🔍 Search</button>
+            <a href="/book" class="btn">🏠 Back</a>
+        </form>
+    </div>
+
+    <script>
+        // 🚀 Smart UX Logic:
+        // - Gets the dropdowns for fromStation and toStation
+        // - 🔁 When the "From Station" changes, it disables that same option in the "To Station" dropdown
+        // - 🔄 If the "To Station" was already set to the same value, it resets it to the first available option
+        // - 🚀 Runs once on page load and every time the user changes the "From Station"
+
+        const fromSelect = document.getElementById('fromStation');
+        const toSelect = document.getElementById('toStation');
+
+        function updateToOptions() {
+            const selectedFrom = fromSelect.value;
+
+            Array.from(toSelect.options).forEach(option => {
+                option.disabled = option.value === selectedFrom;
+            });
+
+            if (toSelect.value === selectedFrom) {
+                toSelect.selectedIndex = 0;
+            }
+        }
+
+        fromSelect.addEventListener('change', updateToOptions);
+        updateToOptions(); // Initial run on page load
+    </script>
+</body>
+</html>

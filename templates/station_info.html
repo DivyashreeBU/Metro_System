@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Station Info</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <a href="/" class="back-btn">⬅️ Back to Home</a>
+    <style>
+        .line-badge {
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: white;
+            margin-right: 5px;
+        }
+        .purple { background-color: purple; }
+        .green { background-color: green; }
+        .gold { background-color: goldenrod; }
+        .info-box { margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🔍 Station Info</h2>
+
+        <form method="post" class="form-box">
+            <label>Search Station:</label>
+            <select name="station_query" required>
+                {% for station in all_stations %}
+                    <option value="{{ station }}">{{ station }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn">🔎 Search</button>
+        </form>
+
+        {% if station %}
+        <div class="info-box">
+            <h3>📍 {{ station }}</h3>
+
+            {% if lines %}
+                <p><strong>Line(s):</strong></p>
+                {% for line in lines %}
+                    <span class="line-badge {{ line.color }}">{{ line.name }}</span>
+                {% endfor %}
+            {% endif %}
+
+            {% if interchange %}
+                <p>🔁 This is an interchange station for: {{ interchange | join(', ') }}</p>
+            {% endif %}
+
+            {% if nearby %}
+                <p>📌 Nearby Stations:</p>
+                <ul>
+                    {% for s in nearby %}
+                        <li>{{ s }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

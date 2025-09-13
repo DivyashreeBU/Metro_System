@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Metro Passenger Portal</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #eef2f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #555;
+        }
+
+        .form-box {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .form-box input,
+        .form-box textarea {
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .form-box label {
+            font-weight: bold;
+            color: #34495e;
+        }
+
+        .btn {
+            background-color: #e74c3c;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #c0392b;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #2980b9;
+            font-weight: bold;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+        .flash-messages {
+  list-style: none;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #ffffff;
+  border-left: 5px solid #0078D4;
+  color: #0078D4;
+  font-weight: bold;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>🚇 Welcome to Metro Passenger Portal</h2>
+            <p>Submit your feedback or complaints to help us improve your travel experience.</p>
+        </div>
+
+        <a href="/" class="nav-link">🏠 Back to Home</a>
+        <a href="/feedback" class="nav-link" style="margin-left:430px; border: none;">Back</a>
+        <button onclick="loadReplyForm()" class="nav-link" style="margin-left: 10px; border: none;">📧 Check Admin Replies</button>
+            <div id="reply-form-container"></div>
+        <form method="post" action="/submit-complaint" class="form-box">
+            <div>
+                <label for="name">Name:</label>
+                <input name="name" id="name" placeholder="Your full name" required>
+            </div>
+
+            <div>
+                <label for="email">Email:</label>
+                <input name="email" id="email" type="email" placeholder="Your email address" required>
+            </div>
+
+            <div>
+                <label for="subject">Subject:</label>
+                <input name="subject" id="subject" placeholder="Complaint subject" required>
+            </div>
+
+            <div>
+                <label for="message">Message:</label>
+                <textarea name="message" id="message" rows="5" placeholder="Describe your issue..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn">🚨 Submit </button>
+  </div>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flash-messages">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}  <!-- ✅ This closes the 'with' block -->
+        </form>
+        <hr style="margin: 40px 0; border: none; border-top: 1px solid #ccc;">
+    </div>
+    <script>
+function loadReplyForm() {
+  const container = document.getElementById('reply-form-container');
+  container.innerHTML = `
+    <h2>📧 Check Admin Replies</h2>
+    <div class="container">
+      <p>Enter your email to view replies to your submitted complaints.</p>
+      <form method="post" action="/check-reply" class="form-box" onsubmit="logEmail(event)">
+        <div>
+          <label for="lookup-email">Email:</label>
+          <input name="email" id="lookup-email" type="email" placeholder="Enter your email" required>
+        </div>
+        <button type="submit" class="btn">🔍 View Replies</button>
+      </form>
+    </div>
+  `;
+}
+
+function logEmail(event) {
+  event.preventDefault(); // prevent actual submission for now
+  const email = document.getElementById('lookup-email').value;
+  console.log("Email entered:", email);
+  event.target.submit(); // now submit the form
+}
+</script>
+</body>
+</html>
