@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+      body {
+            font-family: 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            margin: 0;
+            padding: 40px 0 20px;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            color: var(--text-primary);
+        }
+              /* Metro Routes Card Container */
+.container{
+  width: 800px;
+  margin: 40px auto;
+  padding: 30px;
+  background: var(--bg-card);
+  border-radius: 15px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+        h2 {
+              background: var(--bg-card);
+  -webkit-text-fill-color: var(--purple);
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;  /* center form content */
+  gap: 12px;    
+  height: 300px;        /* space between each field */
+}
+
+/* Labels */
+form label {
+  align-self: flex-start; /* keep label aligned to input */
+  margin-bottom: -20px;     /* reduce gap between label & input */
+  font-weight: 500;
+  text-align: left;
+  margin-left: -200px;
+}
+
+/* Inputs & Select */
+form input,
+form select {
+  width: 220%;             /* wider input boxes */
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  margin-top: 20px;
+}
+
+/* Submit button */
+form button {
+  width: 80%;
+  max-width: 400px;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  background: linear-gradient(90deg, #5d26c1, #27ae60);
+  color: white;
+  cursor: pointer;
+  
+}
+
+        .btn {
+            background: var(--accent-primary);
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, opacity 0.3s ease;
+            display: inline-block;
+            margin-top: 10px;
+            text-decoration: none;
+            width:500px;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>{% include 'common_header.html' %}
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="flash-box">
+              {% for message in messages %}
+                <div class="flash-message">⚠️ {{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <h2>Admin Login</h2>
+        <form method="post" class="form-box">
+          
+            <label>Username:</label>
+            <input name="username" placeholder="Enter your username" required>
+
+            <label>Password:</label>
+            <input name="password" type="password" placeholder="Enter your password" required>
+
+            <button type="submit" class="btn" style="width: 50%;margin-left: 10%;">Login</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin - Complaints</title>
+<link rel="stylesheet" href="/static/style.css">
+<style>
+:root {
+  --purple: #5b1fa6;
+  --green: #2d7a47;
+  --yellow: #e0b000;
+  --bg-primary: linear-gradient(135deg, #f8f9ff 0%, #e8f4f8 50%, #f0f8f0 100%);
+  --bg-card: linear-gradient(135deg, rgba(91, 31, 166, 0.08), rgba(45, 122, 71, 0.05));
+  --text-primary: #2d2d2d;
+  --accent-primary: linear-gradient(45deg, var(--purple), var(--green));
+  --border-color: rgba(91, 31, 166, 0.2);
+  --shadow-color: rgba(91, 31, 166, 0.2);
+}
+
+/* General layout */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--bg-primary);
+  margin: 0;
+  padding: 30px 60px;
+}
+
+/* Buttons */
+.btn-complaints,
+.btn-delete-date,
+.back-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  color: var(--purple);
+  border-radius: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+  margin: 5px 10px 25px 0;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.btn-complaints:hover,
+.btn-delete-date:hover,
+.back-btn:hover {
+  background: var(--bg-primary);
+  -webkit-text-fill-color: var(--accent-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+}
+
+/* Back button right aligned */
+.back-btn {
+  float: right;
+  font-weight: 700;
+}
+
+/* Section headings */
+h2 {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 20px 0 25px;
+  background: var(--accent-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+p {
+  color: var(--text-primary);
+}
+
+/* Complaint Card */
+.complaint-card {
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-left: 6px solid var(--purple);
+  padding: 20px;
+  margin-bottom: 25px;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px var(--shadow-color);
+  transition: all 0.25s ease;
+}
+
+.complaint-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+}
+
+.complaint-card p {
+  margin: 6px 0;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+strong {
+  color: var(--purple);
+}
+
+/* Reply form */
+textarea {
+  width: 100%;
+  height: 90px;
+  padding: 10px;
+  margin-top: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+select, input[type="date"] {
+  margin-top: 10px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: #fff;
+  font-size: 15px;
+}
+
+/* Submit button */
+button {
+  margin-top: 10px;
+  padding: 8px 18px;
+  background-color: var(--green);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--purple);
+}
+
+/* Flash messages */
+.flash-messages {
+  list-style: none;
+  padding: 12px 16px;
+  background: #fff;
+  border-left: 5px solid var(--purple);
+  color: var(--text-primary);
+  font-weight: 600;
+  border-radius: 8px;
+  margin-bottom: 25px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+}
+
+/* Delete by Date Section */
+#delete-section {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 30px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+}
+
+#delete-section label {
+  font-weight: 600;
+  color: var(--purple);
+  display: block;
+  margin-bottom: 8px;
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background: #fff;
+  margin: 60px auto;
+  padding: 25px;
+  border-radius: 16px;
+  max-width: 700px;
+  position: relative;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  animation: slideIn 0.3s ease;
+}
+
+.modal-content h3 {
+  text-align: center;
+  margin-bottom: 20px;
+  background: var(--accent-primary);
+  -webkit-text-fill-color: transparent;
+}
+
+.close-btn {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--purple);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.close-btn:hover {
+  color: var(--green);
+  transform: scale(1.1);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slideIn {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  body { padding: 20px; }
+  .back-btn { float: none; display: block; margin: 10px auto; text-align: center; }
+  .modal-content { width: 90%; }
+}
+
+</style>
+</head>
+<body>
+<h2>Complaints Dashboard</h2>
+<button class="back-btn" onclick="openComplaintsModal()">Complaints List</button>
+<a href="/admin/dashboard" class="btn-complaints">Back to Dashboard</a>
+
+<div style="margin-bottom: 20px;">
+  <label>Delete Complaints by Date Range:</label><br>
+  <input type="date" id="from-date" required>
+  <input type="date" id="to-date" required>
+  <button onclick="deleteComplaintsByDate()">Delete</button>
+</div>
+
+<script>
+function deleteComplaintsByDate() {
+    const fromDate = document.getElementById('from-date').value;
+    const toDate = document.getElementById('to-date').value;
+
+    if (!fromDate || !toDate) {
+        alert("Please select both dates.");
+        return;
+    }
+    if (fromDate > toDate) {
+        alert("From date cannot be later than To date.");
+        return;
+    }
+
+    if (!confirm(`Are you sure you want to delete complaints from ${fromDate} to ${toDate}?`)) return;
+
+    fetch(`/admin/complaints/delete_range`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ from_date: fromDate, to_date: toDate })
+})
+.then(res => {
+    if (res.ok) {
+        alert("Complaints deleted successfully.");
+        // Refresh the page to reload updated complaints
+        location.reload();
+    } else {
+        alert("Failed to delete complaints.");
+    }
+});
+}
+</script>
+
+<p>Total complaints: {{ complaints|length }}</p>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flash-messages">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+<div id="complaints-container">
+  {% if complaints %}
+    {% for c in complaints %}
+      <div class="complaint-card" data-id="{{ c.id }}" data-date="{{ c.date_created.strftime('%Y-%m-%d') if c.date_created else '' }}">
+        <p><strong>Name:</strong> {{ c.name }}</p>
+        <p><strong>Email:</strong> {{ c.email }}</p>
+        <p><strong>Phone:</strong> {{ c.phone }}</p>
+        <p><strong>Subject:</strong> {{ c.subject }}</p>
+        <p><strong>Message:</strong> {{ c.message }}</p>
+        <p><strong>Date Created:</strong>
+          {% if c.date_created %}
+            {{ c.date_created.strftime('%d-%m-%Y %I:%M %p') }}
+          {% else %}
+            Not available
+          {% endif %}
+        </p>
+
+        {% if not c.reply %}
+          <form class="reply-form" method="post" action="/admin/complaints/reply/{{ c.id }}">
+            <textarea name="reply" placeholder="Type your reply here..." required></textarea>
+            <select name="reply_method" required>
+              <option value="email">Reply via Email</option>
+              <option value="phone">Reply via Phone</option>
+            </select>
+            <button type="submit">Send Reply</button>
+          </form>
+        {% else %}
+          <p><strong>Reply:</strong> {{ c.reply }} <em>(via {{ c.reply_method }})</em></p>
+        {% endif %}
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No complaints found.</p>
+  {% endif %}
+</div>
+
+<!-- Modal -->
+<div id="complaints-modal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModal()">×</span>
+    <h2 style="text-align: center;">Replied Complaints</h2>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+// Reply form handling
+document.querySelectorAll('.reply-form').forEach(form => {
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(form);
+
+    fetch(form.action, { method:'POST', body:formData })
+    .then(res => {
+      if(res.ok){
+        alert("✅ Reply sent successfully.");
+        location.reload();  // reload to show updated reply in the same container
+      } else {
+        alert("❌ Failed to send reply.");
+      }
+    });
+  });
+});
+
+// Open modal
+function openComplaintsModal() {
+  const modal = document.getElementById('complaints-modal');
+  const modalBody = document.getElementById('modal-body');
+  modalBody.innerHTML = '';
+
+  // Clone all complaint cards from the dashboard
+  document.querySelectorAll('.complaint-card').forEach(card => {
+    modalBody.appendChild(card.cloneNode(true));
+  });
+
+  modal.style.display = 'block';
+}
+
+
+// Close modal
+function closeModal() {
+  document.getElementById('complaints-modal').style.display = 'none';
+}
+
+window.onclick = function(event) {
+  const modal = document.getElementById('complaints-modal');
+  if(event.target == modal) modal.style.display = 'none';
+}
+</script>
+
+</body>
+</html>

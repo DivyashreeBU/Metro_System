@@ -1,0 +1,31 @@
+<html><link rel="stylesheet" href="/static/style.css">
+<header id="header">
+  <div class="header-content">
+    <div class="logo"><span>Bangalore Metro</span></div>
+    <nav id="nav">
+  <a href="{{ url_for('home') }}" class="nav-item {% if request.endpoint == 'home' %}active{% endif %}">Home</a>
+<a href="{{ url_for('about') }}" class="nav-item {% if request.endpoint == 'about' %}active{% endif %}">About</a>
+<a href="{{ url_for('details') }}" class="nav-item {% if request.endpoint == 'details' %}active{% endif %}">Details</a>
+<a href="{{ url_for('services') }}" class="nav-item {% if request.endpoint == 'services' %}active{% endif %}">Services</a>
+<a href="{{ url_for('contact') }}" class="nav-item {% if request.endpoint == 'contact' %}active{% endif %}">Contact</a>
+
+    </nav>
+    <button class="menu-toggle" id="menuToggle">☰</button>
+  </div>
+</header>
+<script>
+  document.getElementById('menuToggle').addEventListener('click',()=>{
+    document.getElementById('nav').classList.toggle('active');
+  });
+
+  // Highlight current page
+  // Highlight current page
+const links = document.querySelectorAll('nav a');
+links.forEach(link => {
+  if(link.getAttribute('href') === window.location.pathname.split('/').pop()){
+    link.classList.add('active');
+  }
+});
+
+</script>
+</html>

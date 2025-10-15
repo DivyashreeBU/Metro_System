@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Train Management</title>
+<link rel="stylesheet" href="/static/style.css">
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #f4f6f8;
+        padding: 40px;
+        display: flex;
+        flex-direction: column; /* stack items vertically */
+        align-items: center;    /* center the card horizontally */
+    }
+
+    /* Back Button */
+    .btn-back {
+        text-decoration: none;
+        color: #5b1fa6;
+        font-weight: 600;
+        font-size: 1rem;
+        padding: 10px 20px;
+        border-radius: 10px;
+        background: #fff;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transition: all 0.3s;
+        margin-bottom: 25px;
+        align-self: flex-start; /* keep back button at left */
+        margin-left: 60px;
+    }
+    .btn-back:hover {
+        color: #2d7a47;
+        transform: translateX(-3px);
+    }
+
+    /* Card container */
+    .container {
+        width: 95%;
+        max-width: 1400px;
+        background: var(--bg-card, #fff);
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 12px 25px rgba(0,0,0,0.1);
+        border: 1px solid var(--border-color, #ddd);
+    }
+
+    h2 {
+        text-align: center;
+        font-size: 2rem;
+        font-weight: 800;
+        margin-bottom: 30px;
+        background: linear-gradient(135deg, #5b1fa6 0%, #2d7a47 50%, #e0b000 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 30px;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    th, td {
+        padding: 16px;
+        border-bottom: 1px solid #ccc;
+        text-align: left;
+        font-size: 1.1rem;
+    }
+
+    th {
+        background-color: #5b1fa6;
+        color: #fff;
+    }
+
+    tr:hover td {
+        background-color: #e8f4f8;
+    }
+
+    /* Buttons */
+    .btn {
+        padding: 10px 18px;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-delete {
+        background-color: #dc3545;
+        color: white;
+    }
+    .btn-delete:hover { background-color: #c82333; }
+
+    .btn-add {
+        display: block;
+        background-color: #2d7a47;
+        color: white;
+        margin: 10px auto 0;
+        font-size: 1.1rem;
+    }
+    .btn-add:hover { background-color: #1f5e37; }
+
+</style>
+</head>
+
+<body>
+<a href="/admin/dashboard" class="btn-back">← Back to Dashboard</a>
+<h2>Train List</h2>
+<div class="container">
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Color</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for train in trains %}
+            <tr>
+                <td>{{ train.id }}</td>
+                <td>{{ train.name }}</td>
+                <td>{{ train.line.color }}</td>
+                <td>
+                    <form method="post" action="/admin/trains/delete/{{ train.id }}">
+                        <button type="submit" class="btn btn-delete">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<button class="btn btn-add" onclick="addTrainViaConsole()">+ Add Train</button>
+
+<script>
+function addTrainViaConsole() {
+    const name = prompt("Enter train name:");
+    const color = prompt("Enter line color:");
+
+    if (!name || !color) {
+        alert("Train name and color are required.");
+        return;
+    }
+
+    fetch("/admin/trains/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, color })
+    })
+    .then(response => {
+        if (response.ok) {
+            location.reload();
+        } else {
+            alert("Failed to add train.");
+        }
+    });
+}
+</script>
+</body>
+</html>

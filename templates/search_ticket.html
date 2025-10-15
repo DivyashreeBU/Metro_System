@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Find Your Ticket</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+:root {
+  --purple: #5b1fa6;
+  --green: #2d7a47;
+  --yellow: #e0b000;
+  --bg-primary: linear-gradient(135deg, #f8f9ff 0%, #e8f4f8 50%, #f0f8f0 100%);
+  --bg-card: linear-gradient(135deg, rgba(91, 31, 166, 0.08), rgba(45, 122, 71, 0.05));
+  --text-primary: #2d2d2d;
+  --accent-primary: linear-gradient(45deg, var(--purple), var(--green));
+  --border-color: rgba(91, 31, 166, 0.2);
+  --shadow-color: rgba(91, 31, 166, 0.2);
+}
+
+/* Body */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--bg-primary);
+  margin: 0;
+  padding: 40px 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  color: var(--text-primary);
+}
+
+/* Card Container */
+.container {
+  width: 500px;       
+  padding: 30px;
+  background: var(--bg-card);
+  border-radius: 15px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 20px var(--shadow-color);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Headings */
+h2 {
+  color: var(--purple);
+  text-align: center;
+  font-size: 1.8rem;
+  margin: 0 0 20px 0;
+}
+
+/* Form */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+form input,
+form select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+/* Buttons */
+button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  background: linear-gradient(90deg, #5d26c1, #27ae60);
+  color: white;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.btn {
+  display: inline-block;
+  background: var(--accent-primary);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+  margin-top: 10px;
+  transition: transform 0.2s ease, opacity 0.3s ease;
+}
+
+.btn:hover,
+button:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+/* Button container */
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+</style>
+</head>
+<body>
+    <body>
+  <body>
+  <div class="container">
+    <form method="post" action="/search-ticket">
+        <h2 class="title">Find Your Ticket</h2>
+      <input name="passenger_name" placeholder="Passenger Name" required />
+
+      <select name="from_station" id="fromStation" required>
+        {% for station in stations %}
+          <option value="{{ station }}">{{ station }}</option>
+        {% endfor %}
+      </select>
+
+      <select name="to_station" id="toStation" required>
+        {% for station in stations %}
+          <option value="{{ station }}">{{ station }}</option>
+        {% endfor %}
+      </select>
+
+      <button type="submit">Search</button>
+      <a href="/book" class="btn">Back</a>
+    </form>
+  </div>
+</body>
+</body>
+
+    <script>
+        // 🚀 Smart UX Logic:
+        // - Gets the dropdowns for fromStation and toStation
+        // - 🔁 When the "From Station" changes, it disables that same option in the "To Station" dropdown
+        // - 🔄 If the "To Station" was already set to the same value, it resets it to the first available option
+        // - 🚀 Runs once on page load and every time the user changes the "From Station"
+
+        const fromSelect = document.getElementById('fromStation');
+        const toSelect = document.getElementById('toStation');
+
+        function updateToOptions() {
+            const selectedFrom = fromSelect.value;
+
+            Array.from(toSelect.options).forEach(option => {
+                option.disabled = option.value === selectedFrom;
+            });
+
+            if (toSelect.value === selectedFrom) {
+                toSelect.selectedIndex = 0;
+            }
+        }
+
+        fromSelect.addEventListener('change', updateToOptions);
+        updateToOptions(); // Initial run on page load
+    </script>
+</body>
+</html>

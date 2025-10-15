@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Metro Ticket Details</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+:root {
+    --primary-color: #2980b9;
+    --primary-dark: #005fa3;
+    --bg-body: #eef2f7;
+    --bg-card: #ffffff;
+    --bg-ticket: #f9f9f9;
+    --text-dark: #2c3e50;
+    --border-color: #ddd;
+    --btn-radius: 8px;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--bg-body);
+    margin: 0;
+    padding: 20px 10px;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 750px;
+    background-color: var(--bg-card);
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    padding: 30px;
+}
+
+/* ✅ Header row: title and buttons side by side */
+.header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.header-row h2 {
+    color: var(--text-dark);
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+/* Button group beside title */
+.button-group {
+    display: flex;
+    gap: 12px;
+}
+
+/* Buttons */
+.btn {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 10px 22px;
+    border: none;
+    border-radius: var(--btn-radius);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+/* Ticket box styling */
+.ticket-box {
+    background-color: var(--bg-ticket);
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: left;
+    width: 700px;
+    height:650px;
+}
+
+.ticket-box p {
+    font-size: 16px;
+    margin: 0;
+}
+
+.highlight {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.qr-code {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.qr-code img {
+    width: 180px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+/* Responsive layout */
+@media (max-width: 600px) {
+    .header-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .button-group {
+        width: 100%;
+        justify-content: flex-start;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="ticket-box">
+        <h2 style="text-align: center;">Metro Ticket Details</h2>
+            <div class="button-group">
+                <a href="/book" class="btn" >Back</a>
+                <button class="btn" onclick="window.print()" style="margin-left: 400px;">Download Ticket</button>
+            </div>
+        <!-- ✅ Heading and buttons in one horizontal row -->
+        <!-- Ticket info -->
+            <p><span class="highlight">Passenger Name:</span> {{ ticket.passenger_name }}</p>
+            <p><span class="highlight">Phone Number:</span> {{ ticket.phone }}</p>
+            <p><span class="highlight">Train ID:</span> {{ ticket.train_id }}</p>
+            <p><span class="highlight">From Station:</span> {{ ticket.from_station }}</p>
+            <p><span class="highlight">To Station:</span> {{ ticket.to_station }}</p>
+            <p><span class="highlight">Fare:</span> ₹{{ ticket.fare }}</p>
+            <p><span class="highlight">Booked At:</span> {{ ticket.created_at.strftime('%d-%b-%Y %I:%M %p') }}</p>
+
+            <div class="qr-code">
+                <h4>QR Code</h4>
+                {% if ticket.qr_code_path %}
+                    <img src="/{{ ticket.qr_code_path }}" alt="QR Code">
+                {% endif %}
+            </div>
+        </div>
+</body>
+</html>

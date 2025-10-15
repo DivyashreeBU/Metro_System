@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New User</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body {
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--bg-primary);
+  margin: 0;
+  padding: 40px 0 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: var(--text-primary);
+}
+
+/* Card Container */
+.container {
+  width: 800px;       /* keep it tighter like a card */
+  margin: 40px auto;      /* center it with space */
+  padding: 30px;
+  background: var(--bg-card);
+  border-radius: 15px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 20px var(--shadow-color);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;    
+}
+
+
+        h3 {
+            background: var(--accent-primary);
+  -webkit-text-fill-color: #fff;
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  width: 100%;
+  margin-top: 30px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;  /* center form content */
+  gap: 12px;    
+  height: 500px;        /* space between each field */
+}
+
+/* Labels */
+form label {
+  align-self: flex-start; /* keep label aligned to input */
+  margin-bottom: -20px;     /* reduce gap between label & input */
+  font-weight: 500;
+  text-align: left;
+  margin-left: -200px;
+}
+
+/* Inputs & Select */
+form input {
+  width: 220%;             /* wider input boxes */
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  margin-top: 20px;
+}
+
+/* Submit button */
+form button {
+  width: 80%;
+  max-width: 400px;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  background: linear-gradient(90deg, #5d26c1, #27ae60);
+  color: white;
+  cursor: pointer;
+  
+}
+
+/* Buttons */
+.btn {
+  background: var(--accent-primary);
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.3s ease;
+  display: inline-block;
+  margin-top: 10px;
+  text-decoration: none;
+}
+.btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+/* Back button small square */
+.back-btn {
+  background: var(--accent-secondary);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  text-decoration: none;
+  display: inline-block;
+  transition: transform 0.2s ease, opacity 0.3s ease;
+}
+.back-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h3><a href="/admin/users" style="margin-left: -250px; text-decoration: none; margin-right:230px">⬅</a>Add New User</h3>
+        <form method="post" action="/admin/users/add" class="form-box" onsubmit="logUserDetails(event)">
+            <label>Username:</label>
+            <input type="text" name="username" placeholder="Enter username" required>
+
+            <label>Email:</label>
+            <input type="text" name="email" placeholder="Enter email" required>
+
+            <label>Phone:</label>
+            <input type="text" name="phone" placeholder="Enter phone number" required>
+
+            <label>Password:</label>
+            <input type="text" name="password" placeholder="Enter password" required>
+
+            <label>Recharge:</label>
+            <input type="text" name="balance" placeholder="Enter balance amount" required>
+
+            <button type="submit" class="btn-edit">Add User</button>
+        </form>
+    </div>
+
+    <script>
+        function logUserDetails(event) {
+            event.preventDefault(); // prevent actual form submission
+
+            const form = event.target;
+            const username = form.username.value;
+            const email = form.email.value;
+            const phone = form.phone.value;
+            const password = form.password.value;
+            const balance = form.balance.value;
+
+            // Generate a random 8-digit smartcard number
+            const smartcard_number = Math.floor(10000000 + Math.random() * 90000000);
+
+            console.log("📋 New User Details:");
+            console.log("Username:", username);
+            console.log("Email:", email);
+            console.log("Phone:", phone);
+            console.log("Password:", password);
+            console.log("Balance:", balance);
+            console.log("Smartcard Number:", smartcard_number);
+
+            // Optionally submit the form after logging
+            form.submit();
+        }
+    </script>
+</body>
+</html>

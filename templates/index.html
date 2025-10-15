@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Metro Management System - Home</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <!-- Include Header -->
+  <!--#include file="header.html" -->
+{% include 'header.html' %}
+  <section id="home">
+    <div class="container">
+      <div class="hero-content">
+        <h1>Welcome to Bangalore Metro Portal</h1>
+        <p>Seamless travel. Smart ticketing. Real-time updates.</p>
+      </div>
+      <div class="auth-card">
+        <div class="auth-tabs">
+          <button id="loginTab" class="active">Login</button>
+          <button id="registerTab">Register</button>
+        </div>
+        <form id="loginForm" class="auth-form active">
+          <input type="text" placeholder="Username / Email" required />
+          <input type="password" placeholder="Password" required />
+          <button type="submit">Login</button>
+        </form>
+        <form id="registerForm" class="auth-form">
+          <input type="text" placeholder="Full Name" required />
+          <input type="email" placeholder="Email" required />
+          <input type="password" placeholder="Password" required />
+          <input type="password" placeholder="Confirm Password" required />
+          <button type="submit">Register</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Include Footer -->
+  <!--#include file="footer.html" -->
+
+  <script>
+    const loginTab = document.getElementById('loginTab');
+    const registerTab = document.getElementById('registerTab');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+
+    loginTab.addEventListener('click', ()=>{
+      loginTab.classList.add('active'); registerTab.classList.remove('active');
+      loginForm.classList.add('active'); registerForm.classList.remove('active');
+    });
+    registerTab.addEventListener('click', ()=>{
+      registerTab.classList.add('active'); loginTab.classList.remove('active');
+      registerForm.classList.add('active'); loginForm.classList.remove('active');
+    });
+  </script>
+</body>
+<footer>
+  <div class="container_">
+    <p>© 2025 Bangalore Metro Portal • Made with ❤️ in Bengaluru</p>
+  </div>
+</footer>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Generate Ticket</title>
+<link rel="stylesheet" href="/static/style.css">
+<style>
+:root {
+  --purple: #5b1fa6;
+  --green: #2d7a47;
+  --yellow: #e0b000;
+  --bg-primary: linear-gradient(135deg, #f8f9ff 0%, #e8f4f8 50%, #f0f8f0 100%);
+  --bg-secondary: rgba(91, 31, 166, 0.05);
+  --bg-card: linear-gradient(135deg, rgba(91, 31, 166, 0.08), rgba(45, 122, 71, 0.05));
+  --text-primary: #2d2d2d;
+  --text-secondary: #666666;
+  --accent-primary: linear-gradient(45deg, var(--purple), var(--green));
+  --accent-secondary: linear-gradient(45deg, var(--yellow), var(--purple));
+  --accent-tertiary: linear-gradient(45deg, var(--green), var(--yellow));
+  --border-color: rgba(91, 31, 166, 0.2);
+  --shadow-color: rgba(91, 31, 166, 0.2);
+  --card-hover: rgba(91, 31, 166, 0.1);
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--bg-primary);
+  margin: 0;
+  padding: 40px;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  background: var(--bg-card);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px var(--shadow-color);
+}
+
+.back-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.back-btn {
+  padding: 10px 18px;
+  text-decoration: none;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 8px;
+  background: var(--purple);
+  transition: all 0.3s;
+}
+.back-btn:hover {
+  background: var(--green);
+  transform: translateY(-2px);
+}
+
+h2 {
+  text-align: center;
+  color: var(--text-primary);
+  margin-bottom: 30px;
+  font-size: 28px;
+  font-weight: 700;
+  background: var(--accent-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.form-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.form-box .form-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 40%; /* two columns layout */
+  min-width: 250px;
+}
+
+.form-box label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: var(--text-primary);
+}
+
+.form-box input,
+.form-box select {
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.btn {
+  background: var(--green);
+  color: white;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: all 0.3s;
+}
+.btn:hover {
+  background: var(--purple);
+  transform: translateY(-2px);
+}
+</style>
+</head>
+<body>
+  <h2>Generate Ticket</h2>
+
+<div class="back-buttons">
+    <a href="/admin/dashboard" class="back-btn" style="margin-left: -50px;margin-right: 550px;background: var(--bg-card);color:var( --purple)">Back to Dashboard</a>
+    <a href="/admin/tickets" class="back-btn" >Tickets List</a>
+  </div>
+<div class="container">
+  <form method="post" action="/admin/generate-ticket" class="form-box">
+    <div class="form-group">
+      <label for="passenger_name">Passenger Name:</label>
+      <input name="passenger_name" id="passenger_name" placeholder="Enter passenger name" required>
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Phone Number:</label>
+      <input name="phone" id="phone" placeholder="Enter phone number" required>
+    </div>
+
+    <div class="form-group">
+      <label for="from_station">From Station:</label>
+      <select name="from_station" id="from_station" required>
+        {% for station in stations %}
+          <option value="{{ station }}">{{ station }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="to_station">To Station:</label>
+      <select name="to_station" id="to_station" required>
+        {% for station in stations %}
+          <option value="{{ station }}">{{ station }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div style="flex-basis: 100%; display: flex; justify-content: center;">
+      <button type="submit" class="btn">Generate Ticket</button>
+    </div>
+  </form>
+</div>
+
+</body>
+</html>

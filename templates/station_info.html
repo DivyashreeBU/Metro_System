@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Station Info</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        :root {
+            --purple: #5b1fa6;
+            --green: #2d7a47;
+            --yellow: #e0b000;
+            --bg-primary: linear-gradient(135deg, #f8f9ff 0%, #e8f4f8 50%, #f0f8f0 100%);
+            --bg-card: linear-gradient(135deg, rgba(91, 31, 166, 0.08), rgba(45, 122, 71, 0.05));
+            --text-primary: #2d2d2d;
+            --accent-primary: linear-gradient(45deg, var(--purple), var(--green));
+            --border-color: rgba(91, 31, 166, 0.2);
+            --shadow-color: rgba(91, 31, 166, 0.2);
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            margin: 0;
+            padding: 40px 0 20px;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            color: var(--text-primary);
+        }
+
+        
+        /* Metro Routes Card Container */
+.container{
+  width: 800px;
+  margin: 40px auto;
+  padding: 30px;
+  background: var(--bg-card);
+  border-radius: 15px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+        h2 {
+              background: var(--bg-card);
+  -webkit-text-fill-color: var(--purple);
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            height: 200px;
+        }
+
+        form label {
+            align-self: flex-start;
+            font-weight: 500;
+            margin-left: -150px;
+        }
+
+        form select {
+            width: 220%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+
+        form button {
+            width: 80%;
+            max-width: 400px;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            background: linear-gradient(90deg, #5d26c1, #27ae60);
+            color: white;
+            cursor: pointer;
+        }
+
+.result-card {
+  width: 700px;
+  margin: 20px auto;
+  padding: 25px;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Dynamic border colors */
+.result-card.purple {
+  border: 2px solid var(--purple);
+}
+
+.result-card.green {
+  border: 2px solid var(--green);
+}
+
+.result-card.gold {
+  border: 2px solid var(--yellow);
+}
+
+.result-card h3 {
+  font-size: 1.6rem;
+  margin-bottom: 15px;
+}
+
+.result-card ul {
+  padding-left: 20px;
+}
+
+.result-card li {
+  padding: 4px 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.btn {
+            background: var(--accent-primary);
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, opacity 0.3s ease;
+            display: inline-block;
+            margin-top: 10px;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .line-badge {
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: white;
+            margin-right: 5px;
+        }
+
+        .purple { color: purple; }
+        .green { color: green; }
+        .gold { color: goldenrod; }
+
+        .info-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .line-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+
+        .line-title {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+.station-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 columns */
+    gap: 10px;
+    padding-left: 0;
+    list-style: none;
+    margin: 0;
+}
+
+.station-list li {
+    background: #f0f0f0;
+    padding: 8px 12px;
+    border-radius: 6px;
+}
+
+        .interchange {
+            background-color: #fff3cd;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .highlight-box {
+            margin-top: 20px;
+            padding: 20px;
+            background: #e6f7ff;
+            border: 2px solid #5b1fa6;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(91, 31, 166, 0.2);
+        }
+
+        .highlight-box h3 {
+            font-size: 1.5rem;
+            color: #5b1fa6;
+            margin-bottom: 15px;
+        }
+
+        .highlight-interchange {
+            background-color: #fff8e1;
+            border: 2px dashed goldenrod;
+        }
+        .modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 800px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: black;
+}
+    </style>
+</head>
+<body>
+    {% include 'common_header.html' %}
+    {% if station or selected_line %}
+<script>
+  window.onload = function() {
+    const modal = document.getElementById("resultModal");
+    const closeBtn = document.querySelector(".close");
+
+    modal.style.display = "block";
+
+    if (closeBtn) {
+      closeBtn.onclick = function() {
+        modal.style.display = "none";
+      };
+    }
+
+    window.onclick = function(event) {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    };
+  };
+</script>
+{% endif %}
+    <div style=" margin-top: 20px;">
+<!-- Station Info Form -->
+<div class="container">
+    <h2>Station Info</h2>
+    <form method="post">
+        <label>Search Station:</label>
+        <select name="station_query" required>
+            {% for station in all_stations %}
+                <option value="{{ station }}">{{ station }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn">Search</button>
+    </form>
+</div>
+
+<!-- Metro Routes Form -->
+<div class="container" style="margin-top: 20px;">
+    <h2>Metro Routes Overview</h2>
+    <form method="post">
+        <label>Select Line:</label>
+        <select name="line_query" required>
+            <option value="Purple Line">Purple Line</option>
+            <option value="Green Line">Green Line</option>
+            <option value="Yellow Line">Yellow Line</option>
+            <option value="Interchanges">Interchanges</option>
+        </select>
+        <button type="submit" class="btn">Search</button>
+    </form>
+</div>
+
+<!-- Modal Result Box -->
+<div id="resultModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+
+    {% if station %}
+    <div class="result-card {% if lines %}{{ lines[0].color }}{% endif %}">
+      <h3>{{ station }}</h3>
+      {% if lines %}
+        <p><strong>Line(s):</strong></p>
+        {% for line in lines %}
+          <span class="line-badge {{ line.color }}">{{ line.name }}</span>
+        {% endfor %}
+      {% endif %}
+      {% if interchange %}
+        <p>This is an interchange station for: {{ interchange | join(', ') }}</p>
+      {% endif %}
+      {% if nearby %}
+        <p style="color: black;"><strong>Nearby Stations:</strong></p>
+        <ul>
+          {% for s in nearby %}
+            <li>{{ s }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+    {% elif selected_line %}
+    <div class="result-card {{ metro_lines[selected_line].color }}">
+      <h3>{{ selected_line }}</h3>
+      {% if selected_line != 'Interchanges' %}
+        <div class="line-box {{ metro_lines[selected_line].color }}">
+          <div class="station-list">
+            <ul>
+              {% for station in metro_lines[selected_line].stations %}
+                <li>{{ station }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% else %}
+        <div class="interchange highlight-interchange">
+          <strong>🔁 Interchange Stations:</strong>
+          <ul>
+            {% for station, lines in metro_lines['Interchanges'].items() %}
+              <li><strong>{{ station }}</strong> — connects {{ lines | join(', ') }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+    </div>
+</body>
+</html>
